@@ -34,6 +34,16 @@ def get_openai_api_key():
 
 
 def lambda_handler(event, context):
+    if event['requestContext']['http']['method'] == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",  # Allow requests from any origin
+                "Access-Control-Allow-Headers": "Content-Type"
+            },
+            'body': json.dumps("Hello World!"),
+        }
+
     openai_api_key = get_openai_api_key()
     client = OpenAI(api_key=openai_api_key)
 
@@ -55,6 +65,10 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
-        'body': output,
+        "headers": {
+            "Access-Control-Allow-Origin": "*",  # Allow requests from any origin
+            "Access-Control-Allow-Headers": "Content-Type"
+        },
+        'body': json.dumps(output),
     }
 
